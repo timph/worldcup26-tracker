@@ -341,7 +341,7 @@
                 let badgeHtml = "";
                 let cardBorder = "border-gray-800";
 
-                // Prominent dynamic "Your Time" indicator
+                // Prominent dynamic "Local Time" indicator
                 let timeBadgeHtml = "";
                 if (!isSettled) {
                     const localTimeStr = formatUserTime(match.utc);
@@ -350,7 +350,7 @@
                     timeBadgeHtml = `
                         <div class="flex items-center gap-1.5 flex-wrap select-none justify-end">
                             <span class="bg-purple-600/15 text-purple-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-500/10 flex items-center" title="Automatically converted to your local timezone">
-                                <i class="fa-regular fa-clock mr-1 animate-pulse"></i>${localTimeStr} Your Time
+                                <i class="fa-regular fa-clock mr-1 animate-pulse"></i>${localTimeStr} Local
                             </span>
                             ${userShiftedDate !== match.date ? `<span class="bg-rose-500/10 text-rose-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-rose-500/10">${userShiftedDate}</span>` : ''}
                         </div>
