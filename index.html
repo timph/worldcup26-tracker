@@ -55,7 +55,6 @@
 <body class="min-h-screen flex flex-col justify-between antialiased">
 
     <script>
-        // Static team data mapped exactly to World Cup 2026 structures (Groups A-L)
         const TEAMS = {
             "MEX": { name: "Mexico", flag: "🇲🇽", group: "A", pts: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0 },
             "RSA": { name: "South Africa", flag: "🇿🇦", group: "A", pts: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0 },
@@ -122,10 +121,11 @@
             { id: 12, date: "June 14, 2026", time: "21:00 Local", home: "ESP", away: "KSA", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Miami Stadium", city: "Miami 🇺🇸" }
         ];
 
-        // Tracker for active predictions
         let predictions = {};
         let selectedDate = "June 11, 2026";
         const availableDates = ["June 11, 2026", "June 12, 2026", "June 13, 2026", "June 14, 2026"];
+        let lastSyncTime = null;
+        let syncInProgress = false;
     </script>
 
     <!-- Header Navigation -->
@@ -217,15 +217,18 @@
         </div>
     </main>
 
-    <!-- Footer Branding -->
+    <!-- Footer Branding with Live Status -->
     <footer class="bg-darkBg border-t border-gray-900 py-8 text-center text-xs text-gray-500 space-y-2 mt-12">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center space-x-2">
                 <span class="text-gray-400 font-extrabold tracking-tight">WC26 LIVE PREDICTOR</span>
                 <span class="text-gray-700">|</span>
-                <span>Optimized Performance Module</span>
+                <span class="flex items-center gap-1.5" id="syncStatusIndicator">
+                    <span class="w-1.5 h-1.5 bg-gray-600 rounded-full inline-block"></span>
+                    <span>Initializing Live Sync...</span>
+                </span>
             </div>
-            <p class="text-gray-600">Calculated on device. Free of server lag.</p>
+            <p class="text-gray-600">Dynamic UI recalculates standing matrix locally inside the client browser.</p>
         </div>
     </footer>
 
@@ -249,6 +252,105 @@
                 };
                 tabsContainer.appendChild(tab);
             });
+        }
+
+        async function fetchLiveResults() {
+            if (syncInProgress) return;
+            syncInProgress = true;
+            updateSyncIndicator('syncing');
+
+            try {
+                // Fetch matches from rezarahiminia open-source World Cup 2026 API
+                const response = await fetch('https://worldcup26.ir/get/games', {
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!response.ok) throw new Error('API down or returns bad status');
+                const liveData = await response.json();
+
+                if (Array.isArray(liveData)) {
+                    let hasUpdatedAny = false;
+                    
+                    liveData.forEach(liveMatch => {
+                        const homeCode = (liveMatch.home_team?.code || liveMatch.homeTeam?.code || liveMatch.home?.code || liveMatch.home_code || "").toUpperCase();
+                        const awayCode = (liveMatch.away_team?.code || liveMatch.awayTeam?.code || liveMatch.away?.code || liveMatch.away_code || "").toUpperCase();
+
+                        if (homeCode && awayCode) {
+                            const localMatch = fixtures.find(f => f.home === homeCode && f.away === awayCode);
+                            if (localMatch) {
+                                const homeScore = liveMatch.home_score !== undefined ? liveMatch.home_score : liveMatch.homeScore;
+                                const awayScore = liveMatch.away_score !== undefined ? liveMatch.away_score : liveMatch.awayScore;
+                                const isFinished = liveMatch.status === 'finished' || liveMatch.finished === true || liveMatch.status === 'FT';
+
+                                if (homeScore !== undefined && homeScore !== null) {
+                                    const parsedHome = parseInt(homeScore, 10);
+                                    const parsedAway = parseInt(awayScore, 10);
+
+                                    // Detect shifts in either live scores or game progression statuses
+                                    if (localMatch.homeScore !== parsedHome || 
+                                        localMatch.awayScore !== parsedAway || 
+                                        localMatch.status !== (isFinished ? "finished" : "scheduled")) {
+                                        
+                                        localMatch.homeScore = parsedHome;
+                                        localMatch.awayScore = parsedAway;
+                                        localMatch.status = isFinished ? "finished" : "scheduled";
+
+                                        // Lock finished matches by clearing any conflicting user predictions
+                                        if (isFinished && predictions[localMatch.id]) {
+                                            delete predictions[localMatch.id];
+                                        }
+                                        hasUpdatedAny = true;
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    if (hasUpdatedAny) {
+                        lastSyncTime = new Date();
+                        updateSyncIndicator('success');
+                        recalculateStandings(); // Updates TEAMS, sorts table, and repaints DOM
+                        renderMatches();
+                    } else {
+                        lastSyncTime = lastSyncTime || new Date();
+                        updateSyncIndicator('success');
+                    }
+                }
+            } catch (err) {
+                console.warn('Real-world auto-sync fallback triggered (offline/CORS):', err.message);
+                updateSyncIndicator('fallback');
+            } finally {
+                syncInProgress = false;
+            }
+        }
+
+        function updateSyncIndicator(state) {
+            const ind = document.getElementById('syncStatusIndicator');
+            if (!ind) return;
+
+            if (state === 'syncing') {
+                ind.innerHTML = `
+                    <span class="w-1.5 h-1.5 bg-amber-500 rounded-full inline-block animate-pulse"></span>
+                    <span>Syncing live results...</span>
+                `;
+            } else if (state === 'success') {
+                const timeString = lastSyncTime ? lastSyncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'now';
+                ind.innerHTML = `
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block animate-ping"></span>
+                    <span class="text-emerald-400 font-medium">Live Auto-Sync active (Standings updated: ${timeString})</span>
+                `;
+            } else if (state === 'fallback') {
+                ind.innerHTML = `
+                    <span class="w-1.5 h-1.5 bg-gray-500 rounded-full inline-block"></span>
+                    <span>Live check completed (Using offline schedule)</span>
+                `;
+            }
+        }
+
+        function startAutoSyncLoop() {
+            fetchLiveResults(); 
+            // Query the open-source endpoint silently every 5 minutes (300,000 ms)
+            setInterval(fetchLiveResults, 300000); 
         }
 
         function adjustPrediction(fixtureId, teamType, change) {
@@ -403,7 +505,7 @@
                 TEAMS[key].gd = 0;
             });
 
-            // Calculate metrics
+            // Calculate metrics based on official scores + user predictions
             fixtures.forEach(match => {
                 const pred = predictions[match.id];
                 const isPredicted = pred !== undefined;
@@ -547,6 +649,7 @@
             initTabs();
             recalculateStandings();
             renderMatches();
+            startAutoSyncLoop(); // Starts the background 5-minute sync worker
         }
     </script>
 </body>
