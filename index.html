@@ -594,43 +594,70 @@
             renderGroups();
         }
 
-async function fetchRealWorldResults() {
+        async function fetchRealWorldResults() {
+            const targetUrl = 'https://worldcup26.ir/get/games';
+            
+            // Waterfall of public proxy endpoints to ensure uptime
+            const proxies = [
+                `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+                `https://api.codetabs.com/v1/proxy?quest=${targetUrl}`
+            ];
+
+            let rawData = null;
+
+            // Attempt to fetch through the proxies sequentially
+            for (const proxy of proxies) {
+                try {
+                    const response = await fetch(proxy, {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        rawData = await response.json();
+                        break; // Success: exit the loop immediately
+                    }
+                } catch (err) {
+                    console.warn(`[API Sync] Proxy failed, attempting next route:`, proxy);
+                    // Continue to the next proxy in the array
+                }
+            }
+
+            // If all proxies failed or returned malformed data, exit silently
+            if (!rawData || !rawData.games || !Array.isArray(rawData.games)) {
+                console.warn('[API Sync] All proxy routes exhausted or invalid JSON returned.');
+                return;
+            }
+
             try {
-                // Wrap the target URL in a free CORS proxy (AllOrigins) to bypass browser restrictions
-                const targetUrl = encodeURIComponent('https://worldcup26.ir/get/games');
-                const proxyUrl = `https://api.allorigins.win/raw?url=${targetUrl}`;
-
-                const response = await fetch(proxyUrl, {
-                    headers: { 'Accept': 'application/json' }
-                });
-                
-                if (!response.ok) throw new Error('API server or proxy unreachable');
-                
-                const remoteGames = await response.json();
-                if (!Array.isArray(remoteGames)) return;
-
                 let stateUpdated = false;
 
-                remoteGames.forEach(game => {
-                    // Match remote API ID or teams
-                    const matchIndex = fixtures.findIndex(f => 
-                        f.id === game.id || (f.home === game.home_team && f.away === game.away_team)
-                    );
+                rawData.games.forEach(game => {
+                    const matchIndex = fixtures.findIndex(f => f.id === parseInt(game.id, 10));
 
                     if (matchIndex !== -1) {
                         const localGame = fixtures[matchIndex];
                         
-                        // Check if scores have changed on finished or active games
-                        const remoteFinished = game.status?.toLowerCase() === 'finished' || game.status?.toLowerCase() === 'ft';
-                        const scoreChanged = game.home_score !== localGame.homeScore || game.away_score !== localGame.awayScore;
+                        const remoteFinished = String(game.finished).toUpperCase() === 'TRUE' || game.time_elapsed === 'finished';
+                        const hasStarted = game.time_elapsed !== 'notstarted';
+
+                        let newHomeScore = localGame.homeScore;
+                        let newAwayScore = localGame.awayScore;
+
+                        if (hasStarted) {
+                            newHomeScore = parseInt(game.home_score, 10);
+                            newAwayScore = parseInt(game.away_score, 10);
+                        }
+
+                        const scoreChanged = newHomeScore !== localGame.homeScore || newAwayScore !== localGame.awayScore;
                         const statusChanged = (remoteFinished && localGame.status !== 'finished');
 
                         if (scoreChanged || statusChanged) {
-                            localGame.homeScore = game.home_score;
-                            localGame.awayScore = game.away_score;
+                            localGame.homeScore = isNaN(newHomeScore) ? null : newHomeScore;
+                            localGame.awayScore = isNaN(newAwayScore) ? null : newAwayScore;
+                            
                             if (remoteFinished) {
                                 localGame.status = 'finished';
-                                // Strip local predictions overrides if the game settles officially
                                 if (predictions[localGame.id]) {
                                     delete predictions[localGame.id];
                                 }
@@ -645,9 +672,10 @@ async function fetchRealWorldResults() {
                     renderMatches();
                 }
             } catch (err) {
-                console.warn('Silent sync warning (Falling back to local predictions model):', err.message);
+                console.warn('[API Sync] Error parsing the validated JSON payload:', err.message);
             }
         }
+        
         // Initialize State on DOM load
         window.onload = function() {
             initTabs();
