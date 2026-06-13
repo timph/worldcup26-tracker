@@ -108,6 +108,7 @@
         };
 
         const fixtures = [
+            // Matchday 1 (June 11 - June 17)
             { id: 1, date: "June 11, 2026", time: "13:00", utc: "2026-06-11T19:00:00Z", home: "MEX", away: "RSA", homeScore: null, awayScore: null, status: "scheduled", group: "A", stadium: "Mexico City Stadium", city: "Mexico City 🇲🇽" },
             { id: 2, date: "June 11, 2026", time: "20:00", utc: "2026-06-12T02:00:00Z", home: "KOR", away: "CZE", homeScore: null, awayScore: null, status: "scheduled", group: "A", stadium: "Estadio Guadalajara", city: "Guadalajara 🇲🇽" },
             { id: 3, date: "June 12, 2026", time: "15:00", utc: "2026-06-12T19:00:00Z", home: "CAN", away: "BIH", homeScore: null, awayScore: null, status: "scheduled", group: "B", stadium: "Toronto Stadium", city: "Toronto 🇨🇦" },
@@ -119,12 +120,90 @@
             { id: 9, date: "June 14, 2026", time: "12:00", utc: "2026-06-14T17:00:00Z", home: "GER", away: "CUW", homeScore: null, awayScore: null, status: "scheduled", group: "E", stadium: "Houston Stadium", city: "Houston 🇺🇸" },
             { id: 10, date: "June 14, 2026", time: "15:00", utc: "2026-06-14T20:00:00Z", home: "NED", away: "JPN", homeScore: null, awayScore: null, status: "scheduled", group: "F", stadium: "Dallas Stadium", city: "Dallas 🇺🇸" },
             { id: 11, date: "June 14, 2026", time: "18:00", utc: "2026-06-14T22:00:00Z", home: "ENG", away: "CRO", homeScore: null, awayScore: null, status: "scheduled", group: "L", stadium: "Atlanta Stadium", city: "Atlanta 🇺🇸" },
-            { id: 12, date: "June 14, 2026", time: "21:00", utc: "2026-06-15T01:00:00Z", home: "ESP", away: "KSA", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Miami Stadium", city: "Miami 🇺🇸" }
+            { id: 12, date: "June 14, 2026", time: "21:00", utc: "2026-06-15T01:00:00Z", home: "CIV", away: "ECU", homeScore: null, awayScore: null, status: "scheduled", group: "E", stadium: "Miami Stadium", city: "Miami 🇺🇸" },
+            { id: 13, date: "June 15, 2026", time: "12:00", utc: "2026-06-15T16:00:00Z", home: "SWE", away: "TUN", homeScore: null, awayScore: null, status: "scheduled", group: "F", stadium: "Philadelphia Stadium", city: "Philadelphia 🇺🇸" },
+            { id: 14, date: "June 15, 2026", time: "15:00", utc: "2026-06-15T19:00:00Z", home: "BEL", away: "EGY", homeScore: null, awayScore: null, status: "scheduled", group: "G", stadium: "Seattle Stadium", city: "Seattle 🇺🇸" },
+            { id: 15, date: "June 15, 2026", time: "18:00", utc: "2026-06-15T22:00:00Z", home: "IRN", away: "NZL", homeScore: null, awayScore: null, status: "scheduled", group: "G", stadium: "Kansas City Stadium", city: "Kansas City 🇺🇸" },
+            { id: 16, date: "June 16, 2026", time: "12:00", utc: "2026-06-16T16:00:00Z", home: "ESP", away: "CPV", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Boston Stadium", city: "Foxborough 🇺🇸" },
+            { id: 17, date: "June 16, 2026", time: "15:00", utc: "2026-06-16T19:00:00Z", home: "KSA", away: "URU", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Toronto Stadium", city: "Toronto 🇨🇦" },
+            { id: 18, date: "June 16, 2026", time: "18:00", utc: "2026-06-16T22:00:00Z", home: "FRA", away: "SEN", homeScore: null, awayScore: null, status: "scheduled", group: "I", stadium: "Atlanta Stadium", city: "Atlanta 🇺🇸" },
+            { id: 19, date: "June 16, 2026", time: "21:00", utc: "2026-06-17T01:00:00Z", home: "IRQ", away: "NOR", homeScore: null, awayScore: null, status: "scheduled", group: "I", stadium: "Los Angeles Stadium", city: "Los Angeles 🇺🇸" },
+            { id: 20, date: "June 17, 2026", time: "12:00", utc: "2026-06-17T16:00:00Z", home: "ARG", away: "ALG", homeScore: null, awayScore: null, status: "scheduled", group: "J", stadium: "Miami Stadium", city: "Miami 🇺🇸" },
+            { id: 21, date: "June 17, 2026", time: "15:00", utc: "2026-06-17T19:00:00Z", home: "AUT", away: "JOR", homeScore: null, awayScore: null, status: "scheduled", group: "J", stadium: "Dallas Stadium", city: "Dallas 🇺🇸" },
+            { id: 22, date: "June 17, 2026", time: "18:00", utc: "2026-06-17T22:00:00Z", home: "POR", away: "COD", homeScore: null, awayScore: null, status: "scheduled", group: "K", stadium: "New York New Jersey Stadium", city: "East Rutherford 🇺🇸" },
+            
+            // Matchday 2 (June 18 - June 24)
+            { id: 23, date: "June 18, 2026", time: "12:00", utc: "2026-06-18T16:00:00Z", home: "UZB", away: "COL", homeScore: null, awayScore: null, status: "scheduled", group: "K", stadium: "Houston Stadium", city: "Houston 🇺🇸" },
+            { id: 24, date: "June 18, 2026", time: "15:00", utc: "2026-06-18T19:00:00Z", home: "GHA", away: "PAN", homeScore: null, awayScore: null, status: "scheduled", group: "L", stadium: "BC Place", city: "Vancouver 🇨🇦" },
+            { id: 25, date: "June 18, 2026", time: "18:00", utc: "2026-06-18T22:00:00Z", home: "MEX", away: "KOR", homeScore: null, awayScore: null, status: "scheduled", group: "A", stadium: "Mexico City Stadium", city: "Mexico City 🇲🇽" },
+            { id: 26, date: "June 18, 2026", time: "21:00", utc: "2026-06-19T01:00:00Z", home: "RSA", away: "CZE", homeScore: null, awayScore: null, status: "scheduled", group: "A", stadium: "Estadio Monterrey", city: "Monterrey 🇲🇽" },
+            { id: 27, date: "June 19, 2026", time: "12:00", utc: "2026-06-19T16:00:00Z", home: "CAN", away: "QAT", homeScore: null, awayScore: null, status: "scheduled", group: "B", stadium: "Toronto Stadium", city: "Toronto 🇨🇦" },
+            { id: 28, date: "June 19, 2026", time: "15:00", utc: "2026-06-19T19:00:00Z", home: "BIH", away: "SUI", homeScore: null, awayScore: null, status: "scheduled", group: "B", stadium: "Philadelphia Stadium", city: "Philadelphia 🇺🇸" },
+            { id: 29, date: "June 19, 2026", time: "18:00", utc: "2026-06-19T22:00:00Z", home: "BRA", away: "HAI", homeScore: null, awayScore: null, status: "scheduled", group: "C", stadium: "Seattle Stadium", city: "Seattle 🇺🇸" },
+            { id: 30, date: "June 20, 2026", time: "12:00", utc: "2026-06-20T16:00:00Z", home: "MAR", away: "SCO", homeScore: null, awayScore: null, status: "scheduled", group: "C", stadium: "Kansas City Stadium", city: "Kansas City 🇺🇸" },
+            { id: 31, date: "June 20, 2026", time: "15:00", utc: "2026-06-20T19:00:00Z", home: "USA", away: "AUS", homeScore: null, awayScore: null, status: "scheduled", group: "D", stadium: "Los Angeles Stadium", city: "Los Angeles 🇺🇸" },
+            { id: 32, date: "June 20, 2026", time: "18:00", utc: "2026-06-20T22:00:00Z", home: "PAR", away: "TUR", homeScore: null, awayScore: null, status: "scheduled", group: "D", stadium: "San Francisco Bay Area Stadium", city: "Santa Clara 🇺🇸" },
+            { id: 33, date: "June 20, 2026", time: "21:00", utc: "2026-06-21T01:00:00Z", home: "GER", away: "CIV", homeScore: null, awayScore: null, status: "scheduled", group: "E", stadium: "Houston Stadium", city: "Houston 🇺🇸" },
+            { id: 34, date: "June 21, 2026", time: "12:00", utc: "2026-06-21T16:00:00Z", home: "CUW", away: "ECU", homeScore: null, awayScore: null, status: "scheduled", group: "E", stadium: "Dallas Stadium", city: "Dallas 🇺🇸" },
+            { id: 35, date: "June 21, 2026", time: "15:00", utc: "2026-06-21T19:00:00Z", home: "NED", away: "SWE", homeScore: null, awayScore: null, status: "scheduled", group: "F", stadium: "Atlanta Stadium", city: "Atlanta 🇺🇸" },
+            { id: 36, date: "June 21, 2026", time: "18:00", utc: "2026-06-21T22:00:00Z", home: "JPN", away: "TUN", homeScore: null, awayScore: null, status: "scheduled", group: "F", stadium: "Miami Stadium", city: "Miami 🇺🇸" },
+            { id: 37, date: "June 21, 2026", time: "21:00", utc: "2026-06-22T01:00:00Z", home: "BEL", away: "IRN", homeScore: null, awayScore: null, status: "scheduled", group: "G", stadium: "New York New Jersey Stadium", city: "East Rutherford 🇺🇸" },
+            { id: 38, date: "June 22, 2026", time: "12:00", utc: "2026-06-22T16:00:00Z", home: "EGY", away: "NZL", homeScore: null, awayScore: null, status: "scheduled", group: "G", stadium: "Boston Stadium", city: "Foxborough 🇺🇸" },
+            { id: 39, date: "June 22, 2026", time: "15:00", utc: "2026-06-22T19:00:00Z", home: "ESP", away: "KSA", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Toronto Stadium", city: "Toronto 🇨🇦" },
+            { id: 40, date: "June 22, 2026", time: "18:00", utc: "2026-06-22T22:00:00Z", home: "CPV", away: "URU", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Philadelphia Stadium", city: "Philadelphia 🇺🇸" },
+            { id: 41, date: "June 22, 2026", time: "21:00", utc: "2026-06-23T01:00:00Z", home: "FRA", away: "IRQ", homeScore: null, awayScore: null, status: "scheduled", group: "I", stadium: "Seattle Stadium", city: "Seattle 🇺🇸" },
+            { id: 42, date: "June 23, 2026", time: "12:00", utc: "2026-06-23T16:00:00Z", home: "SEN", away: "NOR", homeScore: null, awayScore: null, status: "scheduled", group: "I", stadium: "Kansas City Stadium", city: "Kansas City 🇺🇸" },
+            { id: 43, date: "June 23, 2026", time: "15:00", utc: "2026-06-23T19:00:00Z", home: "ARG", away: "AUT", homeScore: null, awayScore: null, status: "scheduled", group: "J", stadium: "Los Angeles Stadium", city: "Los Angeles 🇺🇸" },
+            { id: 44, date: "June 23, 2026", time: "18:00", utc: "2026-06-23T22:00:00Z", home: "ALG", away: "JOR", homeScore: null, awayScore: null, status: "scheduled", group: "J", stadium: "San Francisco Bay Area Stadium", city: "Santa Clara 🇺🇸" },
+            { id: 45, date: "June 23, 2026", time: "21:00", utc: "2026-06-24T01:00:00Z", home: "POR", away: "UZB", homeScore: null, awayScore: null, status: "scheduled", group: "K", stadium: "Houston Stadium", city: "Houston 🇺🇸" },
+            { id: 46, date: "June 24, 2026", time: "12:00", utc: "2026-06-24T16:00:00Z", home: "COD", away: "COL", homeScore: null, awayScore: null, status: "scheduled", group: "K", stadium: "Dallas Stadium", city: "Dallas 🇺🇸" },
+            { id: 47, date: "June 24, 2026", time: "15:00", utc: "2026-06-24T19:00:00Z", home: "ENG", away: "GHA", homeScore: null, awayScore: null, status: "scheduled", group: "L", stadium: "Atlanta Stadium", city: "Atlanta 🇺🇸" },
+            { id: 48, date: "June 24, 2026", time: "15:00", utc: "2026-06-24T19:00:00Z", home: "CRO", away: "PAN", homeScore: null, awayScore: null, status: "scheduled", group: "L", stadium: "Miami Stadium", city: "Miami 🇺🇸" },
+
+            // Matchday 3 (June 24 - June 27)
+            { id: 49, date: "June 24, 2026", time: "18:00", utc: "2026-06-24T22:00:00Z", home: "CZE", away: "MEX", homeScore: null, awayScore: null, status: "scheduled", group: "A", stadium: "Mexico City Stadium", city: "Mexico City 🇲🇽" },
+            { id: 50, date: "June 24, 2026", time: "18:00", utc: "2026-06-24T22:00:00Z", home: "RSA", away: "KOR", homeScore: null, awayScore: null, status: "scheduled", group: "A", stadium: "Estadio Monterrey", city: "Monterrey 🇲🇽" },
+            { id: 51, date: "June 25, 2026", time: "12:00", utc: "2026-06-25T16:00:00Z", home: "SUI", away: "CAN", homeScore: null, awayScore: null, status: "scheduled", group: "B", stadium: "Toronto Stadium", city: "Toronto 🇨🇦" },
+            { id: 52, date: "June 25, 2026", time: "12:00", utc: "2026-06-25T16:00:00Z", home: "BIH", away: "QAT", homeScore: null, awayScore: null, status: "scheduled", group: "B", stadium: "Boston Stadium", city: "Foxborough 🇺🇸" },
+            { id: 53, date: "June 25, 2026", time: "15:00", utc: "2026-06-25T19:00:00Z", home: "SCO", away: "BRA", homeScore: null, awayScore: null, status: "scheduled", group: "C", stadium: "New York New Jersey Stadium", city: "East Rutherford 🇺🇸" },
+            { id: 54, date: "June 25, 2026", time: "15:00", utc: "2026-06-25T19:00:00Z", home: "MAR", away: "HAI", homeScore: null, awayScore: null, status: "scheduled", group: "C", stadium: "Philadelphia Stadium", city: "Philadelphia 🇺🇸" },
+            { id: 55, date: "June 25, 2026", time: "18:00", utc: "2026-06-25T22:00:00Z", home: "TUR", away: "USA", homeScore: null, awayScore: null, status: "scheduled", group: "D", stadium: "Los Angeles Stadium", city: "Los Angeles 🇺🇸" },
+            { id: 56, date: "June 25, 2026", time: "18:00", utc: "2026-06-25T22:00:00Z", home: "PAR", away: "AUS", homeScore: null, awayScore: null, status: "scheduled", group: "D", stadium: "San Francisco Bay Area Stadium", city: "Santa Clara 🇺🇸" },
+            { id: 57, date: "June 26, 2026", time: "12:00", utc: "2026-06-26T16:00:00Z", home: "ECU", away: "GER", homeScore: null, awayScore: null, status: "scheduled", group: "E", stadium: "Houston Stadium", city: "Houston 🇺🇸" },
+            { id: 58, date: "June 26, 2026", time: "12:00", utc: "2026-06-26T16:00:00Z", home: "CUW", away: "CIV", homeScore: null, awayScore: null, status: "scheduled", group: "E", stadium: "Dallas Stadium", city: "Dallas 🇺🇸" },
+            { id: 59, date: "June 26, 2026", time: "15:00", utc: "2026-06-26T19:00:00Z", home: "TUN", away: "NED", homeScore: null, awayScore: null, status: "scheduled", group: "F", stadium: "Atlanta Stadium", city: "Atlanta 🇺🇸" },
+            { id: 60, date: "June 26, 2026", time: "15:00", utc: "2026-06-26T19:00:00Z", home: "JPN", away: "SWE", homeScore: null, awayScore: null, status: "scheduled", group: "F", stadium: "Miami Stadium", city: "Miami 🇺🇸" },
+            { id: 61, date: "June 26, 2026", time: "18:00", utc: "2026-06-26T22:00:00Z", home: "NZL", away: "BEL", homeScore: null, awayScore: null, status: "scheduled", group: "G", stadium: "Seattle Stadium", city: "Seattle 🇺🇸" },
+            { id: 62, date: "June 26, 2026", time: "18:00", utc: "2026-06-26T22:00:00Z", home: "EGY", away: "IRN", homeScore: null, awayScore: null, status: "scheduled", group: "G", stadium: "Kansas City Stadium", city: "Kansas City 🇺🇸" },
+            { id: 63, date: "June 27, 2026", time: "12:00", utc: "2026-06-27T16:00:00Z", home: "URU", away: "ESP", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Boston Stadium", city: "Foxborough 🇺🇸" },
+            { id: 64, date: "June 27, 2026", time: "12:00", utc: "2026-06-27T16:00:00Z", home: "CPV", away: "KSA", homeScore: null, awayScore: null, status: "scheduled", group: "H", stadium: "Toronto Stadium", city: "Toronto 🇨🇦" },
+            { id: 65, date: "June 27, 2026", time: "15:00", utc: "2026-06-27T19:00:00Z", home: "NOR", away: "FRA", homeScore: null, awayScore: null, status: "scheduled", group: "I", stadium: "Los Angeles Stadium", city: "Los Angeles 🇺🇸" },
+            { id: 66, date: "June 27, 2026", time: "15:00", utc: "2026-06-27T19:00:00Z", home: "SEN", away: "IRQ", homeScore: null, awayScore: null, status: "scheduled", group: "I", stadium: "San Francisco Bay Area Stadium", city: "Santa Clara 🇺🇸" },
+            { id: 67, date: "June 27, 2026", time: "18:00", utc: "2026-06-27T22:00:00Z", home: "JOR", away: "ARG", homeScore: null, awayScore: null, status: "scheduled", group: "J", stadium: "New York New Jersey Stadium", city: "East Rutherford 🇺🇸" },
+            { id: 68, date: "June 27, 2026", time: "18:00", utc: "2026-06-27T22:00:00Z", home: "ALG", away: "AUT", homeScore: null, awayScore: null, status: "scheduled", group: "J", stadium: "Philadelphia Stadium", city: "Philadelphia 🇺🇸" },
+            { id: 69, date: "June 27, 2026", time: "21:00", utc: "2026-06-28T01:00:00Z", home: "COL", away: "POR", homeScore: null, awayScore: null, status: "scheduled", group: "K", stadium: "Seattle Stadium", city: "Seattle 🇺🇸" },
+            { id: 70, date: "June 27, 2026", time: "21:00", utc: "2026-06-28T01:00:00Z", home: "COD", away: "UZB", homeScore: null, awayScore: null, status: "scheduled", group: "K", stadium: "Vancouver Stadium", city: "Vancouver 🇨🇦" },
+            { id: 71, date: "June 27, 2026", time: "21:00", utc: "2026-06-28T01:00:00Z", home: "PAN", away: "ENG", homeScore: null, awayScore: null, status: "scheduled", group: "L", stadium: "Miami Stadium", city: "Miami 🇺🇸" },
+            { id: 72, date: "June 27, 2026", time: "21:00", utc: "2026-06-28T01:00:00Z", home: "CRO", away: "GHA", homeScore: null, awayScore: null, status: "scheduled", group: "L", stadium: "Atlanta Stadium", city: "Atlanta 🇺🇸" }
         ];
 
         let predictions = {};
-        let selectedDate = "June 11, 2026";
-        const availableDates = ["June 11, 2026", "June 12, 2026", "June 13, 2026", "June 14, 2026"];
+        
+        // Comprehensive list of Group Stage dates
+        const availableDates = [
+            "June 11, 2026", "June 12, 2026", "June 13, 2026", "June 14, 2026",
+            "June 15, 2026", "June 16, 2026", "June 17, 2026", "June 18, 2026",
+            "June 19, 2026", "June 20, 2026", "June 21, 2026", "June 22, 2026",
+            "June 23, 2026", "June 24, 2026", "June 25, 2026", "June 26, 2026",
+            "June 27, 2026"
+        ];
+
+        // Intelligently check the user's current date and auto-select if it aligns with the group stage
+        const today = new Date();
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        const todayStr = today.toLocaleDateString('en-US', options); 
+        
+        let selectedDate = availableDates.includes(todayStr) ? todayStr : "June 11, 2026";
     </script>
 
     <!-- Header Navigation -->
