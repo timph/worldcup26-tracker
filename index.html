@@ -347,7 +347,7 @@
                 const tab = document.createElement("button");
                 tab.className = `px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition border ${
                     isSelected 
-                        ? "bg-cupGold text-darkBg border-cupGold shadow-lg shadow-yellow-600/10" 
+                        ? "bg-cupGold text-darkBg border-cupGold shadow-lg shadow-yellow-600/10 active-tab" 
                         : "bg-cardBg hover:bg-gray-800 text-gray-300 border-gray-800"
                 }`;
                 tab.innerText = date;
@@ -358,6 +358,14 @@
                 };
                 tabsContainer.appendChild(tab);
             });
+
+            // Smoothly auto-scroll the active date tab into view
+            setTimeout(() => {
+                const activeTab = tabsContainer.querySelector('.active-tab');
+                if (activeTab) {
+                    activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 50);
         }
 
         function adjustPrediction(fixtureId, teamType, change) {
