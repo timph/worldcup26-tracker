@@ -651,8 +651,8 @@
                     const remoteFinished = String(game.finished).toUpperCase() === 'TRUE' || game.time_elapsed === 'finished';
                     const hasStarted = game.time_elapsed !== 'notstarted';
 
-                    let newHomeScore = hasStarted ? parseInt(game.home_score, 10) : 0;
-                    let newAwayScore = hasStarted ? parseInt(game.away_score, 10) : 0;
+                    let newHomeScore = hasStarted ? parseInt(game.home_score, 10) : "-";
+                    let newAwayScore = hasStarted ? parseInt(game.away_score, 10) : "-";
 
                     // Automatically clear user prediction if real match has finished
                     if (remoteFinished && predictions[game.id]) {
