@@ -506,7 +506,7 @@ let fixtures = [
                 card.className = `bg-cardBg rounded-2xl p-4 sm:p-5 border ${cardBorder} flex flex-col justify-between space-y-4 hover:border-gray-700 transition duration-200 relative overflow-hidden`;
 
                 card.innerHTML = `
-                    <div class="flex items-center justify-between text-xs border-b border-gray-800/40 pb-2">
+                    <div class="flex flex-shrink-0 items-center justify-between text-xs border-b border-gray-800/40 pb-2">
                         <span class="${isKnockout ? 'text-cupGold' : 'text-gray-400'} font-bold uppercase tracking-wide">
                             ${isKnockout ? match.group : 'Group ' + match.group}
                         </span>
