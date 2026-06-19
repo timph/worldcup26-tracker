@@ -742,48 +742,40 @@ let fixtures = [
                 return;
             }
 
-            try {
-                let stateUpdated = false;
+try {
+        let stateUpdated = false;
 
-                // Sync API data fully with local state
-                const newFixturesList = rawData.games.map(game => {
-                    // Resolve Knockout Team Names (If "0", use the label)
-                    let apiHomeTeam = game.home_team_name_en;
-                    if (!apiHomeTeam || apiHomeTeam === "0") apiHomeTeam = game.home_team_label;
+        rawData.events.forEach(apiMatch => {
+            // Find the local fixture solely by matching Team Names
+            // We do not overwrite time or date, preserving your hardcoded order
+            const localFixture = fixtures.find(f => 
+                f.home === apiMatch.strHomeTeam && 
+                f.away === apiMatch.strAwayTeam
+            );
+
+            if (localFixture) {
+                const remoteFinished = apiMatch.strStatus === "Match Finished";
+                const hasStarted = apiMatch.strStatus !== "Not Started";
+
+                // Parse API scores
+                const newHomeScore = hasStarted ? parseInt(apiMatch.intHomeScore, 10) : null;
+                const newAwayScore = hasStarted ? parseInt(apiMatch.intAwayScore, 10) : null;
+
+                // Only update if scores actually changed to keep DOM stable
+                if (localFixture.homeScore !== newHomeScore || localFixture.awayScore !== newAwayScore) {
+                    localFixture.homeScore = newHomeScore;
+                    localFixture.awayScore = newAwayScore;
+                    localFixture.status = remoteFinished ? "finished" : (hasStarted ? "live" : "scheduled");
                     
-                    let apiAwayTeam = game.away_team_name_en;
-                    if (!apiAwayTeam || apiAwayTeam === "0") apiAwayTeam = game.away_team_label;
-
-                    const remoteFinished = String(game.finished).toUpperCase() === 'TRUE' || game.time_elapsed === 'finished';
-                    const hasStarted = game.time_elapsed !== 'notstarted';
-
-                    let newHomeScore = hasStarted ? parseInt(game.home_score, 10) : "-";
-                    let newAwayScore = hasStarted ? parseInt(game.away_score, 10) : "-";
-
-                    // Automatically clear user prediction if real match has finished
-                    if (remoteFinished && predictions[game.id]) {
-                        delete predictions[game.id];
+                    // Clear user predictions if the real match has finished
+                    if (remoteFinished && predictions[localFixture.id]) {
+                        delete predictions[localFixture.id];
                     }
-
-                    return {
-                        id: parseInt(game.id, 10),
-                        date: game.local_date.split(' ')[0],
-                        time: game.local_date.split(' ')[1],
-                        home: apiHomeTeam,
-                        away: apiAwayTeam,
-                        homeScore: isNaN(newHomeScore) ? null : newHomeScore,
-                        awayScore: isNaN(newAwayScore) ? null : newAwayScore,
-                        status: remoteFinished ? "finished" : "scheduled",
-                        group: game.group,
-                        stadiumId: game.stadium_id
-                    };
-                });
-
-                // If mapping succeeds, replace the list to keep everything fresh
-                if(newFixturesList.length > 0) {
-                    fixtures = newFixturesList;
+                    
                     stateUpdated = true;
                 }
+            }
+        });
 
                 if (stateUpdated) {
                     initTabs(); // Re-sync dates dynamically
