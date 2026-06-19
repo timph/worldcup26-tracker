@@ -447,7 +447,9 @@ let fixtures = [
             const container = document.getElementById("matchContainer");
             container.innerHTML = "";
 
-            const filtered = fixtures.filter(f => formatDateString(f.date) === selectedDate);
+            const filtered = fixtures
+                .filter(f => formatDateString(f.date) === selectedDate)
+                .sort((a, b) => a.time.localeCompare(b.time));
 
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-12">No fixtures listed for ${selectedDate}.</div>`;
