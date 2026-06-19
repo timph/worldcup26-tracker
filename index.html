@@ -321,7 +321,7 @@ let fixtures = [
             </div>
 
             <!-- Interactive Match Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="matchContainer">
+            <div class="flex flex-col gap-5" id="matchContainer">
                 <!-- Dynamic Match Cards load here -->
             </div>
         </div>
@@ -449,8 +449,12 @@ let fixtures = [
 
             const filtered = fixtures
                 .filter(f => formatDateString(f.date) === selectedDate)
-                .sort((a, b) => a.time.localeCompare(b.time));
-
+                .sort((a, b) => {
+                    const timeA = a.time.split(':').reduce((h, m) => h * 60 + parseInt(m), 0);
+                    const timeB = b.time.split(':').reduce((h, m) => h * 60 + parseInt(m), 0);
+                    return timeA - timeB;
+            });
+            
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-12">No fixtures listed for ${selectedDate}.</div>`;
                 return;
