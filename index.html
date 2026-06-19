@@ -154,15 +154,15 @@
             try {
                 const [month, day, year] = dateStr.split('/');
                 const [hour, minute] = timeStr.split(':');
-                const stadiumTz = STADIUM_TZ[stadiumId] || "America/Chicago";
 
                 const naive = new Date(Date.UTC(year, month - 1, day, hour, minute));
 
-                const asStadiumTz = new Date(naive.toLocaleString('en-US', { timeZone: stadiumTz }));
-                const asUTC = new Date(naive.toLocaleString('en-US', { timeZone: 'UTC' }));
-                const offsetMs = asUTC - asStadiumTz;
+                //const stadiumTz = STADIUM_TZ[stadiumId] || "America/Chicago";
+                //const asStadiumTz = new Date(naive.toLocaleString('en-US', { timeZone: stadiumTz }));
+                //const asUTC = new Date(naive.toLocaleString('en-US', { timeZone: 'UTC' }));
+                //const offsetMs = asUTC - asStadiumTz;
 
-                const trueUTC = new Date(naive.getTime() + offsetMs);
+                const trueUTC = new Date(naive.getTime());// + offsetMs);
 
                 return trueUTC.toLocaleString('en-US', {
                     timeZone: USER_TZ,
