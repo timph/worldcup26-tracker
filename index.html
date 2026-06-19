@@ -126,6 +126,54 @@
             "16": { name: "SoFi Stadium", city: "Los Angeles 🇺🇸" }
         };
 
+        // 2.5. Stadium IANA timezones (for converting kickoff times to visitor's local time)
+        const STADIUM_TZ = {
+            "1": "America/Mexico_City",   // Estadio Azteca, Mexico City
+            "2": "America/Mexico_City",   // Estadio Akron, Guadalajara
+            "3": "America/Monterrey",     // Estadio BBVA, Monterrey
+            "4": "America/Chicago",       // AT&T Stadium, Dallas
+            "5": "America/Chicago",       // NRG Stadium, Houston
+            "6": "America/Chicago",       // Arrowhead Stadium, Kansas City
+            "7": "America/New_York",      // Mercedes-Benz Stadium, Atlanta
+            "8": "America/New_York",      // Hard Rock Stadium, Miami
+            "9": "America/New_York",      // Gillette Stadium, Boston
+            "10": "America/New_York",     // Lincoln Financial Field, Philadelphia
+            "11": "America/New_York",     // MetLife Stadium, New York
+            "12": "America/Toronto",      // BMO Field, Toronto
+            "13": "America/Vancouver",    // BC Place, Vancouver
+            "14": "America/Los_Angeles",  // Lumen Field, Seattle
+            "15": "America/Los_Angeles",  // Levi's Stadium, San Francisco
+            "16": "America/Los_Angeles"   // SoFi Stadium, Los Angeles
+        };
+
+        // Auto-detect the visitor's timezone, falling back to Austin/Central if unavailable
+        const USER_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Chicago";
+
+        // Converts a fixture's stadium-local date+time into the visitor's local time
+        function convertToUserTime(dateStr, timeStr, stadiumId) {
+            try {
+                const [month, day, year] = dateStr.split('/');
+                const [hour, minute] = timeStr.split(':');
+                const stadiumTz = STADIUM_TZ[stadiumId] || "America/Chicago";
+
+                const naive = new Date(Date.UTC(year, month - 1, day, hour, minute));
+
+                const asStadiumTz = new Date(naive.toLocaleString('en-US', { timeZone: stadiumTz }));
+                const asUTC = new Date(naive.toLocaleString('en-US', { timeZone: 'UTC' }));
+                const offsetMs = asUTC - asStadiumTz;
+
+                const trueUTC = new Date(naive.getTime() + offsetMs);
+
+                return trueUTC.toLocaleString('en-US', {
+                    timeZone: USER_TZ,
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } catch (err) {
+                console.warn('[Timezone] Conversion failed, showing raw stadium time:', err);
+                return timeStr; // graceful fallback
+            }
+        };
+        
         // 3. Initial Baseline State mapped directly from API structure
 let fixtures = [
     // ===== MATCHDAY 1 =====
@@ -419,18 +467,19 @@ let fixtures = [
 
                 let badgeHtml = "";
                 let cardBorder = "border-gray-800";
-
+                
                 let timeBadgeHtml = "";
                 if (!isSettled) {
+                    const localTime = convertToUserTime(match.date, match.time, match.stadiumId);
                     timeBadgeHtml = `
                         <div class="flex items-center gap-1.5 flex-wrap select-none justify-end">
-                            <span class="bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-gray-700 flex items-center">
-                                <i class="fa-regular fa-clock mr-1"></i>${match.time}
+                            <span class="bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-gray-700 flex items-center" title="Stadium time: ${match.time}">
+                                <i class="fa-regular fa-clock mr-1"></i>${localTime} your time
                             </span>
                         </div>
                     `;
                 }
-
+                
                 if (isPredicted) {
                     badgeHtml = `
                         <div class="flex items-center gap-2">
