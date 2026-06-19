@@ -125,27 +125,7 @@
             "15": { name: "Levi's Stadium", city: "San Francisco 🇺🇸" },
             "16": { name: "SoFi Stadium", city: "Los Angeles 🇺🇸" }
         };
-
-        // 2.5. Stadium IANA timezones (for converting kickoff times to visitor's local time)
-        const STADIUM_TZ = {
-            "1": "America/Mexico_City",   // Estadio Azteca, Mexico City
-            "2": "America/Mexico_City",   // Estadio Akron, Guadalajara
-            "3": "America/Monterrey",     // Estadio BBVA, Monterrey
-            "4": "America/Chicago",       // AT&T Stadium, Dallas
-            "5": "America/Chicago",       // NRG Stadium, Houston
-            "6": "America/Chicago",       // Arrowhead Stadium, Kansas City
-            "7": "America/New_York",      // Mercedes-Benz Stadium, Atlanta
-            "8": "America/New_York",      // Hard Rock Stadium, Miami
-            "9": "America/New_York",      // Gillette Stadium, Boston
-            "10": "America/New_York",     // Lincoln Financial Field, Philadelphia
-            "11": "America/New_York",     // MetLife Stadium, New York
-            "12": "America/Toronto",      // BMO Field, Toronto
-            "13": "America/Vancouver",    // BC Place, Vancouver
-            "14": "America/Los_Angeles",  // Lumen Field, Seattle
-            "15": "America/Los_Angeles",  // Levi's Stadium, San Francisco
-            "16": "America/Los_Angeles"   // SoFi Stadium, Los Angeles
-        };
-
+        
         // Auto-detect the visitor's timezone, falling back to Austin/Central if unavailable
         const USER_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Chicago";
 
@@ -257,6 +237,29 @@ let fixtures = [
     { id: 73, date: "06/28/2026", time: "12:00", home: "Runner-up Group A", away: "Runner-up Group B", homeScore: 0, awayScore: 0, status: "scheduled", group: "R32", stadiumId: "16" },
     { id: 104, date: "07/19/2026", time: "15:00", home: "Winner Match 101", away: "Winner Match 102", homeScore: 0, awayScore: 0, status: "scheduled", group: "FINAL", stadiumId: "11" }
 ];
+        
+        function localizeFixtures() {
+            fixtures.forEach(match => {
+                // 1. Combine date and time strings
+                // 2. Format as an ISO string that explicitly states it is in the Chicago Timezone
+                //    (Note: Replacing / with - to make it ISO 8601 compliant)
+                const [month, day, year] = match.date.split('/');
+                const isoString = `${year}-${month}-${day}T${match.time}:00`;
+        
+                // 3. Create a date object specifically for the source timezone (Chicago)
+                // We use a trick: create a date string that represents the time in Chicago
+                const date = new Date(isoString + (Intl.DateTimeFormat().resolvedOptions().timeZone === 'America/Chicago' ? '' : ''));
+                
+                // 4. Project it into the user's local timezone
+                match.localTime = new Date(date).toLocaleString('en-US', {
+                    timeZone: USER_TZ,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            });
+        }
+        
         let predictions = {};
         
         // Formatter to convert MM/DD/YYYY to readable "June 11, 2026"
@@ -476,11 +479,11 @@ let fixtures = [
                 
                 let timeBadgeHtml = "";
                 if (!isSettled) {
-                    const localTime = convertToUserTime(match.date, match.time, match.stadiumId);
+                    // const localTime = convertToUserTime(match.date, match.time, match.stadiumId);
                     timeBadgeHtml = `
                         <div class="flex items-center gap-1.5 flex-wrap select-none justify-end">
                             <span class="bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-gray-700 flex items-center" title="Stadium time: ${match.time}">
-                                <i class="fa-regular fa-clock mr-1"></i>${localTime} your time
+                                <i class="fa-regular fa-clock mr-1"></i>${match.localTime} your time
                             </span>
                         </div>
                     `;
@@ -789,6 +792,7 @@ try {
         
         // Initialize State on DOM load
         window.onload = function() {
+            localizeFixtures();
             initTabs();
             recalculateStandings();
             renderMatches();
