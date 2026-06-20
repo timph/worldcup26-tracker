@@ -726,7 +726,7 @@
             rawData.games.forEach(apiMatch => {
                 // Find the local fixture solely by matching Team Names
                 // We do not overwrite time or date, preserving your hardcoded order
-                const localFixture = fixtures.find(f => f.id === apiMatch.id);
+                const localFixture = fixtures.find(f => f.id === parseInt(apiMatch.id));
 
                 if (localFixture) {
                     const remoteFinished = apiMatch.time_elapsed === "finished";
