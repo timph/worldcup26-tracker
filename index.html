@@ -565,7 +565,7 @@
                 let hScore = isPredicted ? pred.homeScore : match.homeScore;
                 let aScore = isPredicted ? pred.awayScore : match.awayScore;
 
-                if (hScore !== null && aScore !== null) {
+                if ((match.status === "finished" || isPredicted) && hScore !== null && aScore !== null) {
                     const home = TEAMS[match.home];
                     const away = TEAMS[match.away];
 
